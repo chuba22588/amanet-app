@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amanet Express - Portal Client</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary: #0f172a;      /* Deep Navy */
+            --primary-hover: #1e293b;
+            --accent: #d97706;       /* Professional Gold/Amber */
+            --accent-hover: #b45309;
+            --bg: #f1f5f9;           /* Soft light gray */
+            --surface: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #059669;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Navigation Bar */
+        .navbar {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .navbar span {
+            font-size: 12px;
+            color: #cbd5e1;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            padding: 0 20px;
+            box-sizing: border-box;
+            padding-bottom: 50px;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card {
+            background: var(--surface);
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
+            margin-bottom: 30px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Form Elements */
+        .form-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        input, select, button {
+            font-family: inherit;
+            font-size: 14px;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+        }
+
+        button { font-weight: 600; cursor: pointer; }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+        }
+        .btn-accent:hover { background-color: var(--accent-hover); }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--border);
+            font-size: 13px;
+            padding: 8px 14px;
+        }
+        .btn-secondary:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+
+        /* Results Box */
+        .quote-box {
+            margin-top: 20px;
+            background: #fafaf9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+        .quote-box .main-val { font-size: 20px; font-weight: 700; color: var(--primary); }
+        .quote-box .sub-val { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
+
+        /* Store Items */
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .item-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .item-title { font-weight: 600; font-size: 15px; color: var(--primary); margin-bottom: 4px; }
+        .item-category { font-size: 12px; color: var(--text-muted); font-weight: 400; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; margin-left: 8px;}
+
+        .item-price { color: var(--success); font-weight: 700; font-size: 16px; }
+        .item-msrp { text-decoration: line-through; color: #94a3b8; font-size: 12px; margin-left: 8px;}
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        #rezultat-schimb {
+            margin-top: 15px;
+            color: var(--primary);
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .empty-state { text-align: center; color: var(--text-muted); padding: 20px 0; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <h1>Amanet Express</h1>
+    <span>Portal Client</span>
+</nav>
+
+<div class="container">
+
+    <div class="card">
+        <span class="section-label">Evaluare Rapidă Online</span>
+        <div class="form-group">
+            <input type="number" id="est-value" placeholder="Introduceți valoarea pe piață (RON)" style="flex: 2;">
+            <button class="btn-accent" onclick="calculeazaEstimare()" style="flex: 1;">Află Oferta</button>
+        </div>
+        <div id="est-result"></div>
+    </div>
+
+    <div class="card">
+        <span class="section-label">Calculator Schimb Valutar</span>
+        <div class="form-group" style="flex-wrap: wrap;">
+            <input type="number" id="suma-schimb" placeholder="Suma" style="flex: 1; min-width: 100px;">
+            <select id="valuta-schimb" style="flex: 1; min-width: 90px;">
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+                <option value="GBP">GBP</option>
+                <option value="RSD">RSD</option>
+                <option value="CHF">CHF</option>
+                <option value="MDL">MDL</option>
+                <option value="CAD">CAD</option>
+                <option value="AUD">AUD</option>
+                <option value="JPY">JPY</option>
+            </select>
+            <select id="directie-schimb" style="flex: 1; min-width: 120px;">
+                <option value="to_ron">În RON</option>
+                <option value="from_ron">Din RON</option>
+            </select>
+            <button class="btn-primary" onclick="calculeazaSchimb()" style="flex: 1; min-width: 120px;">Calculează</button>
+        </div>
+        <div id="rezultat-schimb"></div>
+    </div>
+
+    <h2>
+        Ocazii Unice
+        <button class="btn-secondary" onclick="incarcaObiecte()">Actualizează Lista</button>
+    </h2>
+    <div class="card" id="lista-obiecte" style="padding: 10px 30px;">
+        <p class="empty-state">Se încarcă vitrina...</p>
+    </div>
+</div>
+
+<script>
+    // PUNE LINK-UL TĂU NGROK AICI
+    const API_BASE = "https://lavonna-unskinned-unspontaneously.ngrok-free.dev";
+    const reqHeaders = { "ngrok-skip-browser-warning": "true" };
+
+    function calculeazaEstimare() {
+        let val = parseFloat(document.getElementById("est-value").value);
+        if(!val || val <= 0) return;
+
+        let cashToday = (val * 0.50).toFixed(2);
+        let interest30Days = (cashToday * 0.003 * 30).toFixed(2);
+        let costToRedeem = (parseFloat(cashToday) + parseFloat(interest30Days)).toFixed(2);
+
+        document.getElementById("est-result").innerHTML = `
+            <div class="quote-box">
+                <div class="main-val">Ofertă Împrumut: ${cashToday} RON</div>
+                <div class="sub-val">Cost total de recuperare în 30 zile: <b>${costToRedeem} RON</b></div>
+            </div>
+        `;
+    }
+
+    function calculeazaSchimb() {
+        let suma = document.getElementById("suma-schimb").value;
+        let valuta = document.getElementById("valuta-schimb").value;
+        let directie = document.getElementById("directie-schimb").value;
+
+        if(!suma) return;
+
+        fetch(`${API_BASE}/schimb_valutar?suma=${suma}&valuta=${valuta}&directie=${directie}`, { headers: reqHeaders })
+            .then(res => res.json())
+            .then(data => {
+                if(data.eroare) {
+                    document.getElementById("rezultat-schimb").innerText = data.eroare;
+                } else {
+                    document.getElementById("rezultat-schimb").innerText = data.mesaj_rezultat;
+                }
+            })
+            .catch(err => document.getElementById("rezultat-schimb").innerText = "Eroare de conexiune");
+    }
+
+    function incarcaObiecte() {
+        fetch(`${API_BASE}/obiecte`, { headers: reqHeaders })
+            .then(res => res.json())
+            .then(data => {
+                let html = "";
+                data.forEach(obj => {
+                    if(obj.status.toLowerCase().trim() === 'de_vanzare') {
+                        let bargainPrice = (obj.valoare_piata * 0.75).toFixed(2);
+                        html += `
+                        <div class="item-row">
+                            <div>
+                                <div class="item-title">${obj.nume} <span class="item-category">${obj.categorie}</span></div>
+                                <div style="margin-top: 6px;">
+                                    <span class="item-price">${bargainPrice} RON</span>
+                                    <span class="item-msrp">Piață: ${obj.valoare_piata} RON</span>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn-primary" onclick="rezervaObiect(${obj.id}, this)" style="background-color: var(--success); padding: 10px 20px;">Cumpără</button>
+                            </div>
+                        </div>`;
+                    }
+                });
+                document.getElementById("lista-obiecte").innerHTML = html || "<p class='empty-state'>Momentan nu sunt oferte disponibile în vitrină.</p>";
+            })
+            .catch(err => document.getElementById("lista-obiecte").innerHTML = "<p class='empty-state' style='color: #ef4444;'>Eroare de conexiune cu serverul.</p>");
+    }
+
+    function rezervaObiect(id, btnElement) {
+        btnElement.innerText = "Rezervat";
+        btnElement.style.backgroundColor = "#ef4444";
+        btnElement.disabled = true;
+
+        fetch(`${API_BASE}/rezervare/${id}?user_id=1`, { method: 'POST', headers: reqHeaders })
+        .then(res => res.json())
+        .then(data => { if (data.eroare) alert("Eroare: " + data.eroare); })
+        .catch(err => console.log("Conexiune eșuată!"));
+    }
+
+    window.onload = incarcaObiecte;
+</script>
+
+</body>
+</html>
