@@ -49,6 +49,9 @@ Base.metadata.create_all(bind=engine)
 
 # --- APP SETUP ---
 app = FastAPI()
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 # Permitem accesul din browser (CORS)
 app.add_middleware(
