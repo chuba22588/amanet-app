@@ -280,22 +280,26 @@
             .then(data => {
                 let html = "";
                 data.forEach(obj => {
-                    if(obj.status.toLowerCase().trim() === 'de_vanzare') {
-                        let bargainPrice = (obj.valoare_piata * 0.75).toFixed(2);
-                        html += `
-                        <div class="item-row">
-                            <div>
-                                <div class="item-title">${obj.nume} <span class="item-category">${obj.categorie}</span></div>
-                                <div style="margin-top: 6px;">
-                                    <span class="item-price">${bargainPrice} RON</span>
-                                    <span class="item-msrp">Piață: ${obj.valoare_piata} RON</span>
-                                </div>
+                    // WE REMOVED THE 'de_vanzare' FILTER TEMPORARILY TO TEST
+                    let bargainPrice = (obj.valoare_piata * 0.75).toFixed(2);
+                    html += `
+                    <div class="item-row">
+                        <div>
+                            <div class="item-title">${obj.nume}
+                                <span class="item-category">${obj.categorie}</span>
+                                <span style="background: #fef08a; color: #a16207; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px;">
+                                    STATUS: ${obj.status}
+                                </span>
                             </div>
-                            <div>
-                                <button class="btn-primary" onclick="rezervaObiect(${obj.id}, this)" style="background-color: var(--success); padding: 10px 20px;">Cumpără</button>
+                            <div style="margin-top: 6px;">
+                                <span class="item-price">${bargainPrice} RON</span>
+                                <span class="item-msrp">Piață: ${obj.valoare_piata} RON</span>
                             </div>
-                        </div>`;
-                    }
+                        </div>
+                        <div>
+                            <button class="btn-primary" onclick="rezervaObiect(${obj.id}, this)" style="background-color: var(--success); padding: 10px 20px;">Cumpără</button>
+                        </div>
+                    </div>`;
                 });
                 document.getElementById("lista-obiecte").innerHTML = html || "<p class='empty-state'>Momentan nu sunt oferte disponibile în vitrină.</p>";
             })
